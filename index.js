@@ -4,19 +4,19 @@ const drivers = [
     {
         name: "Lutfi Mawan",
         vehicleType: "Iris",
-        isAvailable: true,
+        isAvailable: false,
         rating: 5.0
     },
     {
         name: "Afif Ikram",
         vehicleType: "Myvi",
-        isAvailable: false,
-        rating: 4.5
+        isAvailable: true,
+        rating: 4.4
     }
 ];
 
 //show the data in the console
-drivers.forEach(driver => {
+drivers.forEach(drivers => {
     console.log(drivers);
 });
 
@@ -32,17 +32,18 @@ async function main() {
         
         const driversCollection = db.collection("drivers");
 
-        // Insert drivers sequentially and wait for each insert to finish
-        for (const driver of drivers) {
+      drivers.forEach(async (driver) => {
             const result = await driversCollection.insertOne(driver);
-            console.log(`New driver created with _id: ${result.insertedId}`);
-        }
+            console.log(`New driver created with result: ${result}`);
+        });
 
-        const availableDrivers = await db.collection ('drivers').find({
-            isAvailable: true,
-            rating: { $gte: 4.5}
-        }).toArray();
-        console.log("Available drivers:", availableDrivers);
+        const updateResult = await db.collection ('drivers').updateOne(
+            { name: "Afif Ikram" },
+            { $inc: { rating: 0.1 } } );
+        console.log(`Driver updated with result:  ${updateResult}`);
+
+        const deleteResult = await db.collection('drivers').deleteOne({ isAvailable: false });
+        console.log(`Driver deleted with result: ${deleteResult}`);
 
         }finally {
         await client.close();
