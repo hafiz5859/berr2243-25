@@ -11,7 +11,7 @@ const drivers = [
         name: "Afif Ikram",
         vehicleType: "Myvi",
         isAvailable: true,
-        rating: 4.4
+        rating: 4.5
     }
 ];
 
